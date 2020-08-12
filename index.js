@@ -52,32 +52,36 @@ app.post('/event', (req, res) => {
 		// Withdraw from non-existing account
 		if (!(origin in account)) {
 			res.status(404).send('0');
+			return;
 		}
 
 		// Withdraw from existing account
 		account[origin] -= amount;
 		res.status(201).json({ origin: { id: origin, balance: account[origin] } });
+		return;
 	}
 
 	if (type === 'transfer') {
 		const { origin, amount, destination } = req.body;
 
+		if (origin in account) {
+			account[origin] -= amount;
+			if (!(destination in account)) {
+				account[destination] = 0;
+			}
+
+			account[destination] += amount;
+			res.status(201).json({
+				origin: { id: origin, balance: account[origin] },
+				destination: { id: destination, balance: account[destination] },
+			});
+			return;
+		}
 		// Transfer from non-existing account
-		if (!(origin in account || !destination in account)) {
+		else {
 			res.status(404).send('0');
+			return;
 		}
-
-		// Transfer from existing account
-		account[origin] -= amount;
-		if (!(destination in account)) {
-			account[destination] = 0;
-		}
-
-		account[destination] += amount;
-		res.status(201).json({
-			origin: { id: origin, balance: account[origin] },
-			destination: { id: destination, balance: account[destination] },
-		});
 	}
 });
 
