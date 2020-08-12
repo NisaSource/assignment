@@ -16,8 +16,11 @@ app.post('/reset', (req, res) => {
 });
 
 app.get('/balance', (req, res) => {
-	console.log('Balance');
-	res.status(404).send('0');
+	const id = req.query.account_id;
+	// Get balance for non-existing account
+	if (!(id in account)) {
+		res.status(404).send('0');
+	}
 });
 
 app.post('/event', (req, res) => {
