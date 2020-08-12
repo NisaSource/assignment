@@ -24,8 +24,20 @@ app.get('/balance', (req, res) => {
 });
 
 app.post('/event', (req, res) => {
-	console.log('Event');
-	res.status(201).send('Event');
+	const { type } = req.body;
+
+	if (type === 'deposit') {
+		const { destination, amount } = req.body;
+
+		// Create account with initial balance
+		if (!(destination in account)) {
+			account[destination] = amount;
+		}
+
+		res.status(201).json({
+			destination: { id: destination, balance: account[destination] },
+		});
+	}
 });
 
 app.listen(8000, () => {
