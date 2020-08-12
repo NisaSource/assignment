@@ -6,9 +6,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+let account = {};
+
 //Reset state before starting tests
 app.post('/reset', (req, res) => {
 	console.log('Reset');
+	account = {};
 	res.status(200).send('OK');
 });
 
