@@ -62,6 +62,11 @@ app.post('/event', (req, res) => {
 	if (type === 'transfer') {
 		const { origin, amount, destination } = req.body;
 
+		// Transfer from non-existing account
+		if (!(origin in account || !destination in account)) {
+			res.status(404).send('0');
+		}
+
 		// Transfer from existing account
 		account[origin] -= amount;
 		if (!(destination in account)) {
