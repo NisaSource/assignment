@@ -53,6 +53,10 @@ app.post('/event', (req, res) => {
 		if (!(origin in account)) {
 			res.status(404).send('0');
 		}
+
+		// Withdraw from existing account
+		account[origin] -= amount;
+		res.status(201).json({ origin: { id: origin, balance: account[origin] } });
 	}
 });
 
