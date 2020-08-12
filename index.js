@@ -58,6 +58,22 @@ app.post('/event', (req, res) => {
 		account[origin] -= amount;
 		res.status(201).json({ origin: { id: origin, balance: account[origin] } });
 	}
+
+	if (type === 'transfer') {
+		const { origin, amount, destination } = req.body;
+
+		// Transfer from existing account
+		account[origin] -= amount;
+		if (!(destination in account)) {
+			account[destination] = 0;
+		}
+
+		account[destination] += amount;
+		res.status(201).json({
+			origin: { id: origin, balance: account[origin] },
+			destination: { id: destination, balance: account[destination] },
+		});
+	}
 });
 
 app.listen(8000, () => {
