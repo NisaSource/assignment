@@ -32,6 +32,9 @@ app.post('/event', (req, res) => {
 		// Create account with initial balance
 		if (!(destination in account)) {
 			account[destination] = amount;
+		} else {
+			// Deposit into existing account
+			account[destination] += amount;
 		}
 
 		res.status(201).json({
