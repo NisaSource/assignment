@@ -21,6 +21,10 @@ app.get('/balance', (req, res) => {
 	if (!(id in account)) {
 		res.status(404).send('0');
 	}
+
+	// Get balance for existing account
+	const balance = account[id];
+	res.status(200).json(balance);
 });
 
 app.post('/event', (req, res) => {
