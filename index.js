@@ -45,6 +45,15 @@ app.post('/event', (req, res) => {
 			destination: { id: destination, balance: account[destination] },
 		});
 	}
+
+	if (type === 'withdraw') {
+		const { origin, amount } = req.body;
+
+		// Withdraw from non-existing account
+		if (!(origin in account)) {
+			res.status(404).send('0');
+		}
+	}
 });
 
 app.listen(8000, () => {
